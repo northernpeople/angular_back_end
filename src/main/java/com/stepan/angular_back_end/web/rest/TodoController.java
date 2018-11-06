@@ -1,6 +1,5 @@
 package com.stepan.angular_back_end.web.rest;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +39,12 @@ public class TodoController {
 	
 	@PostMapping(value="/", consumes="application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Todo save(@RequestBody Todo dto, Principal p) {
+	public Todo save(@RequestBody Todo dto) {
 		return service.create(dto);
 	}
 	
 	@GetMapping("/{id}")
-	public Todo byId(@PathVariable("id") String id, Principal p){
+	public Todo byId(@PathVariable("id") String id){
 		return service.byId(id); 
 	}
 	
