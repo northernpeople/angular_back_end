@@ -17,7 +17,6 @@ import java.time.*;
 @Getter
 @Accessors(chain=true)
 @ToString
-
 @Entity
 public class Todo {
 

@@ -24,7 +24,7 @@ public class TodoService {
 	}
 	
 	public Todo byId(String id){
-		return repo.getOne(id);
+		return repo.findById(id).get();
 	}
 	
 	public void testData(){

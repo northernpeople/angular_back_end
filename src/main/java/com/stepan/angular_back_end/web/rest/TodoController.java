@@ -27,7 +27,7 @@ public class TodoController {
 	
 	@GetMapping("/")
 	private List<Todo> summary(
-			@RequestParam(value="index",   defaultValue="0") int index,
+			@RequestParam(value="index", defaultValue="0") int index,
 		    @RequestParam(value="size", defaultValue="500") int size){
 				return service.page(index, size);
 	}
