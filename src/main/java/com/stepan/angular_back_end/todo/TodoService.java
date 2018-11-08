@@ -24,7 +24,7 @@ public class TodoService {
 	}
 	
 	public Todo byId(String id){
-		return repo.findById(id).get();
+		return repo.findById(id).orElseThrow( () -> new TodoNotFoundException("no Todo with this id:"+id));
 	}
 	
 	public void testData(){

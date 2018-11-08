@@ -26,7 +26,7 @@ public class TodoController {
 	@Autowired
 	TodoService service;
 	
-	@GetMapping("/")
+	@GetMapping
 	private List<Todo> summary(
 			@RequestParam(value="index", defaultValue="0") int index,
 		    @RequestParam(value="size", defaultValue="500") int size){
@@ -38,7 +38,7 @@ public class TodoController {
 		service.testData();
 	}
 	
-	@PostMapping(value="/", consumes="application/json")
+	@PostMapping(consumes="application/json")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Todo save(@RequestBody Todo dto) {
 		return service.create(dto);
