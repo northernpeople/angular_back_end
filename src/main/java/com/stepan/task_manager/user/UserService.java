@@ -1,11 +1,13 @@
 package com.stepan.task_manager.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.stepan.task_manager.APIException;
 
@@ -20,7 +22,8 @@ public class UserService {
 	}
 
 	public User create(User user) {
-		if (!emailTaken(user.getEmail())) {
+		if (! emailTaken(user.getEmail())) {
+			System.out.println("creating: "+ user);
 			user = save(user);
 			return user;
 		}
@@ -41,6 +44,21 @@ public class UserService {
 
 	public User save(User u) {
 		return userRepo.saveAndFlush(u);
+	}
+
+	public void deleteById(String id) {
+		userRepo.deleteById(id);
+	}
+
+	@Transactional
+	public User update(User u, String id) {
+		Optional<User> found = userRepo.findById(id);
+		System.out.println(u);
+		System.out.println(found);
+		return found
+				.map( user -> user.setName(u.getName()))
+				.orElseGet(() -> create(u));
+
 	}
 
 }
