@@ -14,32 +14,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stepan.task_manager.todo.Todo;
-import com.stepan.task_manager.todo.TodoService;
+import com.stepan.task_manager.user.User;
+import com.stepan.task_manager.user.UserService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/todo")
-public class TodoController {
+@RequestMapping("/user")
+public class UserController {
 
 	@Autowired
-	TodoService service;
+	UserService service;
+
+	@GetMapping("/{id}")
+	private User byId(@PathVariable("id") String id) {
+		return service.byId(id);
+	}
 
 	@GetMapping
-	private List<Todo> all(@RequestParam(value = "index", defaultValue = "0") int index,
+	private List<User> all(@RequestParam(value = "index", defaultValue = "0") int index,
 			@RequestParam(value = "size", defaultValue = "500") int size) {
 		return service.page(index, size);
 	}
 
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Todo save(@RequestBody Todo dto) {
+	public User save(@RequestBody User dto) {
 		return service.create(dto);
-	}
-
-	@GetMapping("/{id}")
-	public Todo byId(@PathVariable("id") String id) {
-		return service.byId(id);
 	}
 
 }

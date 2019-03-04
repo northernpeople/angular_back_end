@@ -1,14 +1,13 @@
 package com.stepan.task_manager.user;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
-import javax.servlet.http.HttpServletRequest;
+import com.stepan.task_manager.APIException;
 
 @Component
 public class UserService {
@@ -16,33 +15,32 @@ public class UserService {
 	@Autowired
 	UserRepo userRepo;
 
-	public User byUserName(String username) {
-		return userRepo.findByUsername(username);
-	}
-
 	public List<User> findAll() {
 		return userRepo.findAll();
 	}
 
-	public User create(User user, Role inRole) {
-		if (!usernameTaken(user)) {
+	public User create(User user) {
+		if (!emailTaken(user.getEmail())) {
 			user = save(user);
 			return user;
 		}
-		return null;
+		throw new APIException("user email already registered");
 	}
 
-	public boolean usernameTaken(User user) {
-		return findAll().stream().map(u -> u.getUsername()).collect(Collectors.toSet()).contains(user.getUsername());
+	public List<User> page(int index, int size) {
+		return userRepo.findAll(PageRequest.of(index, size, Sort.by("created").descending())).getContent();
+	}
+
+	public boolean emailTaken(String email) {
+		return userRepo.findByEmail(email) != null;
 	}
 
 	public User byId(String id) {
-		return userRepo.findById(id).get();
+		return userRepo.findById(id).orElseThrow(() -> new APIException("no user with this id:" + id));
 	}
 
 	public User save(User u) {
 		return userRepo.saveAndFlush(u);
-
 	}
 
 }
