@@ -27,4 +27,7 @@ public class TodoService {
 		return repo.findById(id).orElseThrow(() -> new APIException("no todo with this id:" + id));
 	}
 
+	public void deleteById(String id) {
+		repo.deleteById(id);
+	}
 }

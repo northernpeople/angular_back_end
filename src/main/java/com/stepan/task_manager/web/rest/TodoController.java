@@ -42,4 +42,8 @@ public class TodoController {
 		return service.byId(id);
 	}
 
+	@GetMapping("/delete/{id}")
+	public void deleteById(@PathVariable("id") String id) {
+		service.deleteById(id);
+	}
 }
