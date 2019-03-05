@@ -29,6 +29,11 @@ public class TodoController {
 		return service.create(dto);
 	}
 
+	@PutMapping(path= "/{id}", consumes = "application/json")
+	public Todo replaceTodo(@RequestBody Todo t, @PathVariable String id) {
+		return service.update(t, id);
+	}
+
 	@GetMapping("/{id}")
 	public Todo byId(@PathVariable("id") String id) {
 		return service.byId(id);

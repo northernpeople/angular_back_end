@@ -1,15 +1,18 @@
 package com.stepan.task_manager.todo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.stepan.task_manager.APIException;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Component
 public class TodoService {
 
 	@Autowired
@@ -29,5 +32,16 @@ public class TodoService {
 
 	public void deleteById(String id) {
 		repo.deleteById(id);
+	}
+
+	@Transactional
+	public Todo update(Todo t, String id) {
+		Optional<Todo> found = repo.findById(id);
+		System.out.println(t);
+		System.out.println(found);
+		return found
+				.map( todo -> todo.setTask(t.getTask()))
+				.orElseGet(() -> create(t));
+
 	}
 }
