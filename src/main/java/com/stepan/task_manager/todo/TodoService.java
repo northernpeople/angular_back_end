@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.stepan.task_manager.APIException;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class TodoService {
@@ -29,6 +28,10 @@ public class TodoService {
 	public Todo byId(String id) {
 		return repo.findById(id).orElseThrow(() -> new APIException("no todo with this id:" + id));
 	}
+	
+	public List<Todo> byUserId(String userId) {
+		return repo.findByUserId(userId);
+	}
 
 	public void deleteById(String id) {
 		repo.deleteById(id);
@@ -37,11 +40,7 @@ public class TodoService {
 	@Transactional
 	public Todo update(Todo t, String id) {
 		Optional<Todo> found = repo.findById(id);
-		System.out.println(t);
-		System.out.println(found);
-		return found
-				.map( todo -> todo.setTask(t.getTask()))
-				.orElseGet(() -> create(t));
+		return found.map(todo -> todo.setTask(t.getTask()).setComplete(t.isComplete())).orElseGet(() -> create(t));
 
 	}
 }
